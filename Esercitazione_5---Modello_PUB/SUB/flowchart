@@ -1,0 +1,20 @@
+Step lavoro da fare:
+	1) nella cartella con la chiave per i permessi (<nome_file>.pem), digitare il seguente comando per connettersi al broker dell'uni e sottoscriversi ad un topic indicato:
+			"mosquitto_sub -t temperatura -h 90.147.167.187 -p 8883 -u univr-studenti -P MQTT-esercitazione2024 --cafile ISRG_Root_X1.pem --insecure -d"
+		dove
+			-h serve a specificare l'host a cui connettersi,
+			-p è la porta,
+			-u è l'utente,
+			-t indica il nome del topic a cui iscriversi,
+			-P è la password richiesta per l'accesso,
+			--cafile serve invece ad indicare il file con i permessi per la connessione TSL,
+			--insecure si mette quando come host è stato specificato un indirizzo IP e non un dominio vero e proprio;
+			-d abilità il debugging.
+		Una flag extra che non compare nel comando qui è '-m', usata per specificare un messaggio, per esempio, da pubblicare: "mosquitto_pub -m "37" -t "temperatura"".
+
+	2) per invece pubblicare un topic usare:
+			"mosquitto_pub -t temperatura -m “25” -h 90.147.167.187 -p 8883 -u univr-studenti -P MQTT-esercitazione2024 --cafile ISRG_Root_X1.pem --insecure -d"
+		dove vengono specificate le stesse flag e opzioni di prima.
+
+	3) in locale per avviare il proprio servizio usare la classica interfaccia dei servizi:
+			"sudo service mosquitto <comando>".
