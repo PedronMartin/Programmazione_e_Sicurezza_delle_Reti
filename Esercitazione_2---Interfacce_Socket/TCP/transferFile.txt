@@ -1,0 +1,9 @@
+File di prova
+
+per 
+mandare
+dati
+da
+server
+a
+client, un byte alla volta
