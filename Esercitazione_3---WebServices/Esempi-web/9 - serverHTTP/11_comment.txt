@@ -1,0 +1,7 @@
+Una volta premuto submit ecco cosa succede sul terminale:
+
+    Ciò che riceve il server è indecifrabile dato che parliamo di un file, per tanto non riesce a visualizzarlo.
+
+Su WSH è possibile vedere i vari PDU che compongono il file inviato. Il tipo di HTTP è sempre POST dato che stiamo mandando dati al server, che quindi attacca il file dopo l'header HTTP.
+
+

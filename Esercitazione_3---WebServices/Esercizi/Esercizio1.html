@@ -1,0 +1,20 @@
+<!-- Esercizio 1: Scrivere e provare una pagina HTML che ricarica periodicamente il sito dell’ANSA-->
+
+<!DOCTYPE html>
+<html>
+    <body>
+
+        <iframe id="main" height="20000" width="2000"></iframe>
+
+        <!-- la ricarico ogni tot secondi -->
+        <script>
+            setInterval(function() {
+                document.getElementById("main").src="https://www.ansa.it/index.html"
+            }, 3000);
+        </script>
+
+    <!-- interessante notare come con ansa originale non funzioni perchè le richieste HTTP dentro <iframe> vengono bloccate per motivi di sicurezza.
+        Invece, questo modo funziona perchè stiamo accedendo solo al loro index.html pubblico, in modo statico.-->
+
+    </body>
+</html>

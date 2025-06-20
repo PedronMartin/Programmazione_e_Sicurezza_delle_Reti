@@ -1,0 +1,141 @@
+#include "network.h"
+
+float calcolaSomma(float val1, float val2) {
+   return (val1 + val2);
+}
+
+void primeFromTo(float val1, float val2, char **result) {
+    *result = malloc(300000);
+    if (*result == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return;
+    }
+    int flag;
+    for (int i = val1; i < val2; i++) {
+
+        if (i == 1 || i == 0)
+            continue;
+ 
+        flag = 1;
+ 
+        for (int j = 2; j <= i / 2; ++j) {
+            if (i % j == 0) {
+                flag = 0;
+                break;
+            }
+        }
+
+        if (flag == 1)
+            sprintf(*result + strlen(*result), "%d, ", i);
+    }
+    sprintf(*result + strlen(*result) - 2, "\0");
+}
+
+int main(int argc, char *argv[]) {
+
+    //controllo numero di argomenti
+    if(argc != 2) {
+        printf("Uso: %s <porta>\n", argv[0]);
+        return -1;
+    }
+
+    //conversione della porta
+    int port = atoi(argv[1]);
+    if(port <= 0 || port > 65535) {
+        printf("Porta non valida: %d\n", port);
+        return -1;
+    }
+
+    //dichiarazioni
+    socketif_t sockfd;
+    FILE* connfd;
+    int res, i;
+    long length=0;
+    char request[MTU], url[MTU], method[10], c;
+    
+    //creazione connessione
+    sockfd = createTCPServer(port);
+    if(sockfd < 0){
+        printf("[SERVER] Errore: %i\n", sockfd);
+        return -1;
+    }
+    
+    //attendo e servo tutte le richieste del client
+    while(true) {
+        connfd = acceptConnectionFD(sockfd);
+        
+        //analizzo metodo HTTP, url e content-length
+        fgets(request, sizeof(request), connfd);
+        strcpy(method,strtok(request, " "));
+        strcpy(url,strtok(NULL, " "));
+        while(request[0]!='\r') {
+            fgets(request, sizeof(request), connfd);
+            if(strstr(request, "Content-Length:")!=NULL)
+                length = atol(request+15);
+        }
+        
+        //se il metodo è POST leggo il body
+        if(strcmp(method, "POST")==0)
+            for(i=0; i<length; i++)
+                c = fgetc(connfd);
+        
+        //analizzo l'url
+        if(strstr(url, "calcola-somma")==NULL && strstr(url, "primenumber")==NULL)
+            fprintf(connfd,"HTTP/1.1 200 OK\r\n\r\n{\r\n    Funzione non riconosciuta!\r\n}\r\n");
+        else {
+
+            //dichiarazioni ed estrazione variabili generiche (skeleton)
+            char *function, *op1, *op2;
+            float somma, val1, val2;
+            function = strtok(url, "?&");
+            op1 = strtok(NULL, "?&");
+            op2 = strtok(NULL, "?&");
+            strtok(op1,"=");
+
+            //conversione dei parametri estratti generica
+            val1 = atof(strtok(NULL,"="));
+            strtok(op2,"=");
+            val2 = atof(strtok(NULL,"="));
+
+            if(strstr(url, "calcola-somma")!=NULL) {
+                printf("Chiamata a funzione sommatrice\n");
+                
+                //chiamata alla funzione locale
+                somma = calcolaSomma(val1, val2);
+                
+                //skeleton: codifica (serializzazione) del risultato
+                fprintf(connfd,"HTTP/1.1 200 OK\r\n\r\n{\r\n    \"somma\":%f\r\n}\r\n", somma);
+            }
+            else if(strstr(url, "primenumber")!=NULL) {
+                printf("Chiamata a funzione primenumber\n");
+
+                //chiamata alla funzione locale
+                char *result;
+                primeFromTo(val1, val2, &result);
+
+                //skeleton: codifica (serializzazione) del risultato
+                fprintf(connfd,"HTTP/1.1 200 OK\r\n\r\n%s\r\n", result);
+            }
+        }
+        
+        //chiusura connessione
+        fclose(connfd);
+        printf("\n\n[SERVER] sessione HTTP completata\n\n");
+    }
+
+    closeConnection(sockfd);
+    return 0;
+}
+
+/* DOMANDA:
+Come si potrebbe modificare il codice in modo che le 3 invocazioni finiscano su 3
+macchine diverse?
+– Bisogna modificare anche il codice del server?
+
+*/
+
+/* RISPOSTE:
+- è bastato aggiungere al server la richiesta da riga di comando il numero di porta con cui aprire la connessione, e cambiare nel client il numero di porta delle 3 threads.
+In questo modo, non avviene un effettiva parallelizzazione del calcolo, ma solo delle richieste. Le threads sono solo il mezzo con cui parallelizziamo il calcolo,
+per cui stiamo solo istanziando 3/o più server diversi, che si sframmentano quindi la complessità del calcolo.
+*/
