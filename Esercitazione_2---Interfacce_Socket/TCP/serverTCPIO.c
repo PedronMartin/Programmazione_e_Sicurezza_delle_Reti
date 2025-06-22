@@ -40,6 +40,7 @@ int main() {
         // rimuove newline se presente
         nome_file[len] = '\0';
         nome_file[strcspn(nome_file, "\n")] = 0;
+        //strcpsn ritorna l'indice della prima occorrenza del carattere specificato, in questo caso "\n"
 
         printf("[SERVER] Richiesto file: %s\n", nome_file);
 
