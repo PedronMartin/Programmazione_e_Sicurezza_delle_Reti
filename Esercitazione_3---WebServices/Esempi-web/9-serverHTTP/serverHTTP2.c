@@ -56,7 +56,7 @@ int main(){
         //rimuovo la '/' iniziale dal nome del file
         if(filename[0] == '/')
             memmove(filename, filename + 1, strlen(filename));
-        printf("\n[SERVER] FILENAME: %s", filename);
+        printf("\n[SERVER] FILENAME: %s\n", filename);
 
         //cerco e apro il file richiesto. Se non esiste, invio errore 404 e passo al prossimo client
         FILE *requestedFile = fopen(filename, "rb");
@@ -92,8 +92,9 @@ int main(){
         printf("[SERVER] File letto. Bytes letti: %zu\n", bytesRead);
 
         //stringa fissa dell'header HTTP di base: risposta 200 positiva, tipo di contenuto HTML e charset dei caratteri utf-8
-        //interessante notare come senza il charset indicato il browser non visualizza correttamente i caratteri accentati
-        char *basicHeader = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\r\n";
+        char basicHeader[256];
+        snprintf(basicHeader, sizeof(basicHeader),
+            "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: %zu\r\n\r\n", bytesRead);
         size_t headerLength = strlen(basicHeader);
 
         //verifica che il contenuto del file non superi la dimensione massima

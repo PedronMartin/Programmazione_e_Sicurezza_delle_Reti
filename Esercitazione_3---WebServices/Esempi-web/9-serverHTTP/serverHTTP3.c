@@ -76,6 +76,7 @@ int main() {
             fputs(HTMLGETResponse, connfd);
             //chiudo la connessione
             printf("\n[SERVER] Sessione HTTP completata.\n\n");
+            fclose(connfd);
         }
 
     }

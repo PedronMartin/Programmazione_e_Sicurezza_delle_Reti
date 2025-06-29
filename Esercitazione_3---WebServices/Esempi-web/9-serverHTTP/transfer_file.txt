@@ -1,0 +1,2 @@
+File di testo di prova per l'esercizio riguardo serverHTTP.c e form-file.html.
+E' possibile vedere questo testo sia sul terminale del server che in chiaro su WSH.

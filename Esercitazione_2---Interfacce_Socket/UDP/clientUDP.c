@@ -26,10 +26,3 @@ destinatario avente indirizzo IP "127.0.0.1" e porta 35000
 7.Scrivi host/porta del mittente e contenuto ricevuto
 8.FINE
 */
-
-/*
-Compilazione:
-gcc network.c client.c -o EXEC1
-gcc network.c server.c -o EXEC2
-esegui in due terminali diversi gli EXEC
-*/

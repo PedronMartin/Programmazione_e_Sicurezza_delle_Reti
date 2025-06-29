@@ -1,5 +1,0 @@
-Per gli esercizi, seguire le slide di consegna e aprire man mano i file richiesti. La spiegazione per ogni file e/o sorgente di codice si trova come commento dentro ai file stessi.
-
-Per favorire una maggiore comprensibilità e un maggiore matching tra esercizio -> file, i codici sono stati enumerati in ordine con cui sono stati richiesti.
-
-Per l'esercizio 9, più ampio e complesso, è stata creata proprio una sottocartella a parte e, per ogni consegna di esercizio, un relativo codice commentato e un file txt di breve spiegazione.
