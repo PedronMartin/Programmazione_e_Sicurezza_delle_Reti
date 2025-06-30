@@ -1,0 +1,13 @@
+Approfondimento sulle CA (pratico):
+è possibile visualizzare in lettura 'comprensibile' di un certo certificato digitale usando openssl.
+
+Per esempio, possiamo leggere le informazioni del certificato con cui ci colleghiamo al sistema PUB/SUB offerto da univr nell'esercitazione 5 utilizzando il seguente comando (nella stessa cartella del CA):
+
+        openssl x509 -text -noout -in ISRG_Root_X1.pem
+
+Openssl è un tool molto potente che permette di gestire certificati, chiavi e protocolli di sicurezza.
+Il comando 'x509' è specificamente utilizzato per visualizzare i certificati X.509, che sono lo standard per i certificati digitali come abbiamo visto a teoria.
+Il resto delle opzioni specifica il formato di output e il file di input.
+
+Al interno del certificato possiamo leggere, coerentemente con quanto fatto a teoria, l'utilizzo della RSA per la chiave pubblica, oppure di algoritmi come SHA256 per la firma digitale vera e propria.
+Vediamo anche il periodo di attività, il numero identificativo seriale del certificato e altro ancora.
